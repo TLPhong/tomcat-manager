@@ -38,7 +38,7 @@
     <!--Apps-->
     <div>
       <h3 class="text-gray-500 font-bold mb-1">Applications</h3>
-      <div class="flex items-center w-full my-2" v-for="(app, index) in form.apps" v-bind:key="app">
+      <div class="flex items-center w-full my-2" v-for="(app, index) in form.apps" v-bind:key="index">
         <input-field class="flex-grow" v-on:keyup="appsChange($event.target.value, index)" v-bind:value="app"></input-field>
         <font-awesome-icon class="cursor-pointer text-red-400 mx-2"
                            v-on:click="deleteApp(app)"
@@ -84,7 +84,7 @@ export default {
     this.form.pass = this.user.pass;
     this.form.isAdmin = this.user.isAdmin;
     this.form.apps = [...this.user.apps]
-    this.changeSubject = new Subject().pipe(debounceTime(1000))
+    this.changeSubject = new Subject().pipe(debounceTime(250))
     this.changeSubscription = this.changeSubject.subscribe((user) => {
       this.$emit("change",  deepClone(user))
     })
@@ -119,11 +119,15 @@ export default {
       this.emitChange()
     },
     deleteApp(appToDelete){
-      this.form.apps = this.form.apps.filter(app => app === appToDelete)
+      this.form.apps = this.form.apps.filter(app => app !== appToDelete)
       this.emitChange()
     },
     emitChange() {
-      if (!this.form.login.isEmpty && !this.form.pass.isEmpty) {
+      console.group("emitChange")
+      console.log(!!this.form.login.length)
+      console.log(!!this.form.pass)
+      console.groupEnd()
+      if (!!this.form.login && !!this.form.pass) {
         this.changeSubject.next(this.form)
       }
     }

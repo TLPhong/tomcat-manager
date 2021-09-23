@@ -1,3 +1,6 @@
+import {of} from 'rxjs';
+import {delay} from 'rxjs/operators';
+
 class UsersService {
     listUser() {
         console.info("List user")
@@ -40,11 +43,15 @@ class UsersService {
     saveUser(user) {
         //TODO
         console.info("Save user " + JSON.stringify(user))
+        return of({})
+            .pipe(delay(1000))
     }
 
     deleteUser(user) {
         //TODO
         console.info("Delete user " + JSON.stringify(user))
+        return of({})
+            .pipe(delay(1000))
     }
 }
 

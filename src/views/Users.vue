@@ -18,9 +18,16 @@
                  v-bind:user="createdUser"
                  v-bind:key="createdUser.login"/>
     </div>
-    <div class="absolute top-0 right-0">
-      <div class="bg-green-400 text-white rounded-bl-full w-10 h-10 pl-4 pt-1">
+    <div class="absolute top-0 right-0 text-white">
+      <div class="bg-blue-300 rounded-bl-full w-10 h-10 pl-4 pt-1"
+           v-if="isSaving">
+        <font-awesome-icon class="animate-spin" :icon="['fas', 'cog']"/>
+      </div>
+      <div v-else-if="!isSaving && isLastSaveSuccess" class="bg-green-300 rounded-bl-full w-10 h-10 pl-4 pt-1">
         <font-awesome-icon :icon="['fas', 'check']"/>
+      </div>
+      <div v-else class="bg-red-300 rounded-bl-full w-10 h-10 pl-4 pt-1">
+        <font-awesome-icon :icon="['fas', 'times']"/>
       </div>
     </div>
   </div>
@@ -31,6 +38,7 @@ import UserCard from "@/components/UserCard";
 import ColoredButton from "@/components/ColoredButton";
 import InputField from "@/components/InputField";
 import usersService from '../services/Users';
+import {finalize} from "rxjs";
 
 export default {
   name: "UserManager",
@@ -38,6 +46,7 @@ export default {
   data() {
     return {
       isSaving: false,
+      isLastSaveSuccess: true,
       createdUsers: []
     }
   },
@@ -55,11 +64,17 @@ export default {
       })
     },
     userChanged(user) {
+      this.isSaving = true
       usersService.saveUser(user)
+          .pipe(finalize(() => this.isSaving = false))
+          .subscribe()
     },
     deleteUser(deleteUser) {
+      this.isSaving = true
       this.createdUsers = this.createdUsers.filter(user => user !== deleteUser)
       usersService.deleteUser(deleteUser)
+          .pipe(finalize(() => this.isSaving = false))
+          .subscribe()
     }
   }
 }

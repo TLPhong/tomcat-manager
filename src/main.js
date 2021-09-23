@@ -3,7 +3,7 @@ import App from './App.vue'
 import './assets/tailwind.css'
 import router from './router'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faTrash, faPlus, faCheck, faSpinner, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faTrash, faPlus, faCheck, faSpinner, faTimes, faCog} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -15,6 +15,7 @@ library.add(faCheck)
 library.add(faSpinner)
 library.add(faPlus)
 library.add(faTimes)
+library.add(faCog)
 
 new Vue({
     router,
