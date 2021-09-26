@@ -44,14 +44,14 @@
                            v-on:click="deleteApp(app)"
                            :icon="['fas', 'times']"/>
       </div>
-      <ColorButton v-on:click="addApp">Add app</ColorButton>
+      <ColoredButton v-on:click="addApp">Add app</ColoredButton>
     </div>
   </div>
 </template>
 
 <script>
 import InputField from "@/components/InputField";
-import ColorButton from "@/components/ColoredButton";
+import ColoredButton from "@/components/ColoredButton";
 import deepClone from 'lodash.clonedeep';
 import {Subject} from "rxjs"
 import {debounceTime} from 'rxjs/operators';
@@ -63,7 +63,7 @@ import {debounceTime} from 'rxjs/operators';
  */
 export default {
   name: "UserCard",
-  components: {ColoredButton, ColorButton, InputField},
+  components: {ColoredButton, InputField},
   props: ["user"],
   data() {
     return {
