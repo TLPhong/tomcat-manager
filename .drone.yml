@@ -1,0 +1,22 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: Linting front
+    image: node:14
+    commands:
+      - cd front
+      - npm run lint
+  - name: Building front
+    image: node:14
+    commands:
+      - cd front
+      - npm run build
+  - name: Packaging
+    image: luky/rsync
+    commands:
+      - mkdir .ci_dist
+      - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
+      - rsync -vr front/dist. .ci_dist/public/
+
