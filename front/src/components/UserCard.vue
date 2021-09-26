@@ -52,7 +52,6 @@
 <script>
 import InputField from "@/components/InputField";
 import ColorButton from "@/components/ColoredButton";
-import ColoredButton from "@/components/ColoredButton";
 import deepClone from 'lodash.clonedeep';
 import {Subject} from "rxjs"
 import {debounceTime} from 'rxjs/operators';
