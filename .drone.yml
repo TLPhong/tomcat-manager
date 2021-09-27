@@ -22,8 +22,26 @@ steps:
     image: luky/rsync
     commands:
       - mkdir .ci_dist
-      - mkdir .release
       - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
       - rsync -vr front/dist/ .ci_dist/public/
-      - rsync -vrz .ci_dist/ .release/
-      - ls -lah .release/
+
+  - name: Build result
+    image: iankoulski/tree
+    commands:
+      - tree -a .ci_dist
+
+  - name: publish
+    image: plugins/github-release
+    settings:
+      files: .ci_dist/*
+      title: Tomcat manager
+      draft: true
+      prerelease: true
+      api_key:
+        from_secret: release_key
+    when:
+      event:
+        - promote
+      target:
+        - release
+
