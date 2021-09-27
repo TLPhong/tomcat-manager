@@ -24,5 +24,6 @@ steps:
       - mkdir .ci_dist
       - mkdir .release
       - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
-      - rsync -vr front/dist. .ci_dist/public/
+      - rsync -vr front/dist/ .ci_dist/public/
       - rsync -vrz .ci_dist/ .release/
+      - ls -lah .release/
