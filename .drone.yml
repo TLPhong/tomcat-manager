@@ -30,7 +30,7 @@ steps:
     commands:
       - tree -a .ci_dist
 
-  - name: publish
+  - name: Publish
     image: plugins/github-release
     settings:
       files: .ci_dist/*
