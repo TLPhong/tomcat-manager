@@ -19,21 +19,23 @@ steps:
       - cd front
       - npm run build
   - name: Packaging
-    image: luky/rsync
+    image: realsimonmicro/alpine-deploy
     commands:
       - mkdir .ci_dist
       - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
       - rsync -vr front/dist/ .ci_dist/public/
+      - zip -rv ${DRONE_REPO_NAME}.zip .ci_dist/
 
   - name: File tree
     image: iankoulski/tree
     commands:
       - tree -a .ci_dist
+      - ls -lh ${DRONE_REPO_NAME}.zip
 
   - name: Publish
     image: plugins/github-release
     settings:
-      files: .ci_dist/*
+      files: ${DRONE_REPO_NAME}.zip
       title: Tomcat manager
       draft: true
       prerelease: true
