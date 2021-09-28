@@ -1,19 +1,7 @@
-from flask import Flask, send_from_directory
-from flask_cors import CORS
+import controller
 
-app = Flask(
-    import_name="Tomcat manager",
-    static_url_path="/",
-    static_folder="public",
-)
-CORS(app)
-
-
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
-
+flask_application = controller.app
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    flask_application.debug = True
+    flask_application.run()
