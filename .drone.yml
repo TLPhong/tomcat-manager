@@ -1,0 +1,48 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: Install dependencies
+    image: node:14
+    commands:
+      - cd front
+      - npm install
+  - name: Linting front
+    image: node:14
+    commands:
+      - cd front
+      - npm run lint
+  - name: Building front
+    image: node:14
+    commands:
+      - cd front
+      - npm run build
+  - name: Packaging
+    image: realsimonmicro/alpine-deploy
+    commands:
+      - mkdir .ci_dist
+      - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
+      - rsync -vr front/dist/ .ci_dist/public/
+      - cd .ci_dist
+      - zip -rv ../${DRONE_REPO_NAME}.zip ./*
+
+  - name: File tree
+    image: iankoulski/tree
+    commands:
+      - tree -a .ci_dist
+      - ls -lh ${DRONE_REPO_NAME}.zip
+
+  - name: Publish
+    image: plugins/github-release
+    settings:
+      files: ${DRONE_REPO_NAME}.zip
+      title: Tomcat manager
+      draft: true
+      prerelease: true
+      api_key:
+        from_secret: release_key
+    when:
+      event:
+        - tag
+
