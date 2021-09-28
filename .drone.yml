@@ -41,7 +41,5 @@ steps:
         from_secret: release_key
     when:
       event:
-        - promote
-      target:
-        - release
+        - tag
 
