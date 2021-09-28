@@ -24,7 +24,7 @@ steps:
       - mkdir .ci_dist
       - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
       - rsync -vr front/dist/ .ci_dist/public/
-      - zip -rv ${DRONE_REPO_NAME}.zip .ci_dist/
+      - zip -rv ${DRONE_REPO_NAME}.zip .ci_dist/*
 
   - name: File tree
     image: iankoulski/tree
