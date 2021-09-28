@@ -6,4 +6,5 @@ app = Flask(
     static_url_path="/",
     static_folder="public",
 )
-CORS(app)
+
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5000"}})
