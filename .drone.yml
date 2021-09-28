@@ -25,7 +25,7 @@ steps:
       - rsync -vr --exclude back.iml --exclude .gitignore  back/  .ci_dist/
       - rsync -vr front/dist/ .ci_dist/public/
 
-  - name: Build result
+  - name: File tree
     image: iankoulski/tree
     commands:
       - tree -a .ci_dist
