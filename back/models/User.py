@@ -1,18 +1,19 @@
-from models import Role
+from models import Application
 
 
 class User:
-    def __init__(self, user_name, password):
+    def __init__(self, user_name, password, note=""):
         assert user_name
         assert password
         self.user_name = user_name
         self.password = password
-        self.roles = []
+        self.note = note
+        self.applications = []
 
-    def set_roles(self, role_name_list=None):
-        if role_name_list is None:
-            role_name_list = []
-        new_roles = []
-        for role_name in role_name_list:
-            new_roles.append(Role(role_name))
-        self.roles = new_roles
+    def set_roles(self, app_list=None):
+        if app_list is None:
+            app_list = []
+        new_apps = []
+        for app in app_list:
+            new_apps.append(Application(app))
+        self.applications = new_apps

@@ -1,3 +1,3 @@
-class Role:
-    def __init__(self, role_name):
-        self.role_name = role_name
+class Application:
+    def __init__(self, app_name):
+        self.app_name = app_name
