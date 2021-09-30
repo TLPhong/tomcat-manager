@@ -1,8 +1,8 @@
 from flask import send_from_directory, request, Response
 
-import configuration
+import app_config
 
-app = configuration.app
+app = app_config.app
 
 
 @app.route('/')

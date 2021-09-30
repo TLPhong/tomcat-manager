@@ -2,15 +2,12 @@ import sqlite3
 
 
 class UserRepository:
-    def __init__(self):
-        from configparser import ConfigParser
-        config = ConfigParser()
-        config.read("config.ini")
-        self.connection_config = config["Database"]['connection']
-        assert self.connection_config
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+        assert self.connection_string
 
     def _connection(self):
-        return sqlite3.connect(self.connection_config)
+        return sqlite3.connect(self.connection_string)
 
     def get_user(self, user_name):
         """

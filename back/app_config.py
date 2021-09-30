@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from config import config
 
 app = Flask(
     import_name="Tomcat manager",
@@ -7,4 +8,5 @@ app = Flask(
     static_folder="public",
 )
 
-CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5000"}})
+cors = config["Server"]["cors"]  # Can be list string or regex
+CORS(app, resources={r"/api/*": {"origins": cors}})
