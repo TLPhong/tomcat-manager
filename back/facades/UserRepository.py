@@ -2,12 +2,31 @@ import sqlite3
 
 
 class UserRepository:
-    def __init__(self, connection_string):
-        self.connection_string = connection_string
-        assert self.connection_string
+
+    def __init__(self, config):
+        connection = config["Database"]["connection"]
+        assert connection
+        self.connection_string = connection
 
     def _connection(self):
         return sqlite3.connect(self.connection_string)
+
+    def list_user(self):
+        """
+        Query for a list of user
+        :return: a list tuple (user_name, user_pass, note)
+        """
+        query = "SELECT (user_name, user_pass, note) FROM users"
+
+        result = []
+        with self._connection() as connection:
+            cursor = connection.cursor()
+            for row in cursor.execute(query):
+                result.append(
+                    (row[0], row[1], row[2])
+                )
+        return result
+
 
     def get_user(self, user_name):
         """

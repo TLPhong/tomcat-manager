@@ -10,7 +10,7 @@ class User:
         self.note = note
         self.applications = []
 
-    def set_roles(self, app_list=None):
+    def set_apps(self, app_list=None):
         if app_list is None:
             app_list = []
         new_apps = []

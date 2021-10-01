@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from config import config
+from local_config import config
 
 app = Flask(
     import_name="Tomcat manager",
