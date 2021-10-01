@@ -17,3 +17,22 @@ class User:
         for app in app_list:
             new_apps.append(Application(app))
         self.applications = new_apps
+
+    @property
+    def is_admin(self):
+        return False
+
+    @is_admin.setter
+    def is_admin(self, is_admin):
+        # Do nothing
+        pass
+
+
+    def serialize(self):
+        return {
+            "username": self.user_name,
+            "password": self.password,
+            "isAdmin": self.is_admin,
+            "note": self.note,
+            "apps": self.applications
+        }

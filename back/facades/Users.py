@@ -14,9 +14,9 @@ class Users:
         :return: a list of user | empty list if none found | None if can't fetch
         """
         logging.debug("Fetching users")
-        result_users = None
+        result = None
         try:
-            result_users = []
+            user_list = []
             for (username, password, note) in self.user_repo.list_user():
                 user = User(
                     user_name=username,
@@ -27,8 +27,8 @@ class Users:
                 for (_, role_name) in self.user_repo.get_roles(user.user_name):
                     apps.append(Application(app_name=role_name))
                 user.set_apps(apps)
-                result_users.append(user)
+                user_list.append(user)
+            result = user_list
         except Exception as e:
             logging.exception("Fail to list user", exc_info=e)
-        return result_users
-
+        return result

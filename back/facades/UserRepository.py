@@ -16,12 +16,13 @@ class UserRepository:
         Query for a list of user
         :return: a list tuple (user_name, user_pass, note)
         """
-        query = "SELECT (user_name, user_pass, note) FROM users"
+        query = "SELECT user_name, user_pass, note FROM users"
 
         result = []
         with self._connection() as connection:
             cursor = connection.cursor()
-            for row in cursor.execute(query):
+            cursor.execute(query)
+            for row in cursor.fetchall():
                 result.append(
                     (row[0], row[1], row[2])
                 )
@@ -34,7 +35,7 @@ class UserRepository:
         :param user_name: target user name
         :return: tuple of (username, password, note) or None
         """
-        query = "SELECT (user_name, user_pass, note) FROM users WHERE user_name = :user_name"
+        query = "SELECT user_name, user_pass, note FROM users WHERE user_name = :user_name"
         params = {"user_name": user_name}
         with self._connection() as connection:
             cursor = connection.cursor()
@@ -107,7 +108,7 @@ class UserRepository:
         :param role_name: role name of the target mapping
         :return: a tuple (user_name, role_name) of found mapping or None
         """
-        query = "SELECT (user_name, role_name) FROM user_roles WHERE user_name = :user_name AND role_name = :role_name"
+        query = "SELECT user_name, role_name FROM user_roles WHERE user_name = :user_name AND role_name = :role_name"
         params = {
             "user_name": user_name,
             "role_name": role_name
@@ -128,7 +129,7 @@ class UserRepository:
         :param user_name: user name of the target user
         :return: a list of tuple (username, role name) for a user or an empty list
         """
-        query = "SELECT (user_name, role_name) FROM user_roles WHERE user_name = :user_name"
+        query = "SELECT user_name, role_name FROM user_roles WHERE user_name = :user_name"
         params = {"user_name": user_name}
 
         result = []
