@@ -22,10 +22,10 @@
     <div class="mb-3">
       <input-field label="Login"
                    v-on:keyup="loginChange($event.target.value)"
-                   v-bind:value="form.login"></input-field>
+                   v-bind:value="form.username"></input-field>
       <input-field label="Pass"
                    v-on:keyup="passwordChange($event.target.value)"
-                   v-bind:value="form.pass"
+                   v-bind:value="form.password"
                    type="password"></input-field>
       <div class="flex justify-start">
         <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-2">
@@ -57,7 +57,7 @@ import {Subject} from "rxjs"
 import {debounceTime} from 'rxjs/operators';
 
 /**
- * @prop form Object{note,login,pass,isAdmin,apps}
+ * @prop form Object{note,username,password,isAdmin,apps}
  * @event change
  * @event delete
  */
@@ -69,8 +69,8 @@ export default {
     return {
       form: {
         note: "",
-        login: "",
-        pass: "",
+        username: "",
+        password: "",
         isAdmin: false,
         apps: []
       },
@@ -79,8 +79,8 @@ export default {
   },
   created() {
     this.form.note = this.user.note;
-    this.form.login = this.user.login;
-    this.form.pass = this.user.pass;
+    this.form.username = this.user.username;
+    this.form.password = this.user.password;
     this.form.isAdmin = this.user.isAdmin;
     this.form.apps = [...this.user.apps]
     this.changeSubject = new Subject().pipe(debounceTime(250))
@@ -99,11 +99,11 @@ export default {
       this.emitChange()
     },
     loginChange(newValue) {
-      this.form.login = newValue
+      this.form.username = newValue
       this.emitChange()
     },
     passwordChange(newValue) {
-      this.form.pass = newValue
+      this.form.password = newValue
       this.emitChange()
     },
     isAdminChange(newValue) {
@@ -123,10 +123,10 @@ export default {
     },
     emitChange() {
       console.group("emitChange")
-      console.log(!!this.form.login.length)
-      console.log(!!this.form.pass)
+      console.log(!!this.form.username.length)
+      console.log(!!this.form.password)
       console.groupEnd()
-      if (!!this.form.login && !!this.form.pass) {
+      if (!!this.form.username && !!this.form.password) {
         this.changeSubject.next(this.form)
       }
     }

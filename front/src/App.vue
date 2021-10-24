@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import NavBar from "@/components/NavPanel";
+import NavBar from "./components/NavPanel";
 export default {
   components: {NavBar}
 }

@@ -16,65 +16,70 @@
                  v-on:change="userChanged"
                  v-on:delete="deleteUser(createdUser)"
                  v-bind:user="createdUser"
-                 v-bind:key="createdUser.login"/>
+                 v-bind:key="createdUser.username"/>
     </div>
-    <div class="absolute top-0 right-0 text-white">
-      <div class="bg-blue-300 rounded-bl-full w-10 h-10 pl-4 pt-1"
-           v-if="isSaving">
-        <font-awesome-icon class="animate-spin" :icon="['fas', 'cog']"/>
-      </div>
-      <div v-else-if="!isSaving && isLastSaveSuccess" class="bg-green-300 rounded-bl-full w-10 h-10 pl-4 pt-1">
-        <font-awesome-icon :icon="['fas', 'check']"/>
-      </div>
-      <div v-else class="bg-red-300 rounded-bl-full w-10 h-10 pl-4 pt-1">
-        <font-awesome-icon :icon="['fas', 'times']"/>
-      </div>
-    </div>
+    <StatusCorner :is-working="isWorking" :error-message="errorMessage" :is-last-request-success="isHavingError"/>
   </div>
 </template>
 
 <script>
-import UserCard from "@/components/UserCard";
-import ColoredButton from "@/components/ColoredButton";
-import InputField from "@/components/InputField";
+import UserCard from "../components/UserCard";
+import ColoredButton from "../components/ColoredButton";
+import InputField from "../components/InputField";
 import usersService from '../services/Users';
 import {finalize} from "rxjs";
+import StatusCorner from "../components/StatusCorner";
 
 export default {
   name: "UserManager",
-  components: {InputField, ColoredButton, UserCard},
+  components: {StatusCorner, InputField, ColoredButton, UserCard},
   data() {
     return {
-      isSaving: false,
-      isLastSaveSuccess: true,
+      isWorking: false,
+      isHavingError: false,
+      errorMessage: "",
       createdUsers: []
     }
   },
   created() {
-    this.createdUsers = usersService.listUser()
+    this.isWorking = true
+    usersService.listUser()
+        .finally(() => this.isWorking = false)
+        .then(async response => {
+          if (response.ok) {
+            this.createdUsers = await response.json()
+            this.isHavingError = false
+          }
+        }, reason => {
+          this.isHavingError = true
+          this.errorMessage = reason
+        })
   },
   methods: {
     addNewUserCard() {
       this.createdUsers.unshift({
         note: "",
-        login: "",
-        pass: "",
+        username: "",
+        password: "",
         isAdmin: false,
         apps: []
       })
     },
     userChanged(user) {
-      this.isSaving = true
+      this.isWorking = true
       usersService.saveUser(user)
-          .pipe(finalize(() => this.isSaving = false))
+          .pipe(finalize(() => this.isWorking = false))
           .subscribe()
     },
     deleteUser(deleteUser) {
-      this.isSaving = true
-      this.createdUsers = this.createdUsers.filter(user => user !== deleteUser)
+      this.isWorking = true
+      // this.createdUsers = this.createdUsers.filter(user => user !== deleteUser)
       usersService.deleteUser(deleteUser)
-          .pipe(finalize(() => this.isSaving = false))
-          .subscribe()
+          .pipe(finalize(() => this.isWorking = false))
+          .subscribe(() => {
+            this.isHavingError = true
+            this.errorMessage = this.errorMessage += "+"
+          })
     }
   }
 }
